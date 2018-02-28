@@ -1,0 +1,115 @@
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+  let captions = null;
+  let videos = null;
+  const socket = io();
+
+  function intro(){
+    socket.emit('type-intro');
+  }
+  function deleteText(){
+    socket.emit('type-delete');
+  }
+
+  socket.on('video-selector', (titles) => {
+    for (var title of titles) {
+      $('#video-selector').append(`<button class="title-selector" val="${title}">${title}</button>`)
+    }
+
+    $(".title-selector").click(function(){
+      const title = $(this).attr('val');
+      socket.emit('captions', title);
+    });
+  });
+
+  socket.on('captions', (_captions) => {
+    $('#videos').html('');
+    $('#radio-buttons-start').html('');
+    $('#radio-buttons-end').html('');
+
+    captions = _captions;
+    content = captions.content;
+
+    $('#videos').append('<button class="play-video" content="' + content + '" start="' + captions.lines[0]['start'] + '" duration="' + ((captions.lines[captions.lines.length - 1]['end']) - captions.lines[0]['start']) + '">Entire Video</button>');
+
+    for (var line of captions.lines) {
+      $('#videos').append('<button class="play-video" content="' + content + '" start="' + line.start + '" duration="' + (line.end-line.start) + '">' + line.title + '</button>');
+    }
+
+    $('#videos').append('<input type="checkbox" name="subtitles" value="true">Subtitles</input>');
+
+    var globalChunks = [];
+    var n = 0;
+    for (var caption of captions.lines) {
+      caption.chunks = caption['text-chunks'].split('/');
+      for (var chunk of caption.chunks){
+        $('#radio-buttons-start').append(`<input type="radio"
+        name="chunk" value="${n}">
+        <label for="contactChoice1">${chunk}</label>`)
+
+        $('#radio-buttons-end').append(`<button class="end-chunk" chunk="${n}">${chunk}</button>`)
+        globalChunks.push(chunk);
+        n++;
+      }
+    }
+
+    $(".end-chunk").click(function(){
+      var subtitles = "false";
+      if ($('input[name="subtitles"]:checked').val()) {
+        subtitles = "true"
+      }
+      const chunkIndex = $(this).attr('chunk');
+      var value = $('input[name="chunk"]:checked').val();
+      var output = '';
+      for (var i = Number(value); i < Number(chunkIndex) + 1; i++) {
+        console.log(globalChunks[i]);
+        output += String(globalChunks[i]) + ' ';
+      }
+      console.log('value: ' + value);
+      console.log('chunkIndex: ' + chunkIndex);
+      console.log('output: ' + output);
+      socket.emit('type-word', output, subtitles);
+    });
+
+    $(".play-video").click(function(){
+      const video = $(this).attr('content');
+      const start = $(this).attr('start');
+      const duration = $(this).attr('duration');
+      socket.emit('play-video', video, start, duration);
+    });
+  });
+
+  $(document).ready(function(){
+
+    $(".word-button").click(function(){
+      const word = $(this).attr('word');
+      const def = $(this).attr('def');
+      console.log('def = ' + def);
+      if (def) {
+        socket.emit('type-word-with-def', { word: word, def: def });
+      } else {
+        socket.emit('type-word', word);
+      }
+    });
+
+    $("#submit-button").click(function(){
+      socket.emit('type-word', $("#text-area").val());
+    });
+  });
+  </script>
+</head>
+<body>
+  <button onclick="intro()">Introduction</button>
+  <button onclick="deleteText()">delete</button>
+  <br>
+  <textarea id="text-area"></textarea>
+  <button id="submit-button">Submit</button>
+  <div id="video-selector"></div>
+  <br><br>
+  <div id="videos"></div>
+  <form id="radio-buttons-start"></form>
+  <div id="radio-buttons-end"></div>
+  <br/>
+</body>

@@ -1,0 +1,70 @@
+{
+	"CDC1": {
+		"content": "CDC-NS.mp4",
+		"lines": [
+			{
+				"text": "...las dos sabemos que Chavano no está listo para ser presidente.",
+				"start": 20.3608749,
+				"end": 23.113624900000104,
+				"text-chunks": "...las dos sabemos/que Chava/no está listo/para ser presidente.",
+				"title": "clip-1"
+			},
+			{
+				"text": "Tarde o temprano la va a cagar.",
+				"start": 23.196707900000092,
+				"end": 24.865374900000006,
+				"text-chunks": "Tarde o temprano/la va a cagar.",
+				"title": "clip-2"
+			},
+			{
+				"text": "Tú espérate y te vas ganando el puesto<br/>poco a poco.",
+				"start": 24.948457899999994,
+				"end": 27.535041899999896,
+				"text-chunks": "Tú espérate/y te vas ganando el puesto/poco a poco.",
+				"title": "clip-3"
+			}
+		],
+		"offset": 0
+	},
+	"CDC2": {
+		"content": "CDC-2-NS.mp4",
+		"lines": [
+			{
+				"text": "Tú papá era muy buena persona,todo mundo lo quería.",
+				"start": 0.9954169000000093,
+				"end": 2.9133328999998866,
+				"text-chunks": "Tú papá era muy buena persona/todo mundo lo quería",
+				"title": "clip-1"
+			},
+			{
+				"text": "Sí, pero eso está muy trillado, güey.Tengo que decir algo diferente,",
+				"start": 2.997416899999962,
+				"end": 5.540957899999967,
+				"text-chunks": "Sí, pero eso está muy trillado, güey/Tengo que decir algo diferente",
+				"title": "clip-2"
+			},
+			{
+				"text": "voy a hablar frente a un chingode personas, güey.",
+				"start": 5.625041900000042,
+				"end": 6.917332900000019,
+				"text-chunks": "voy a hablar frente/a un chingode personas, güey",
+				"title": "clip-3"
+			},
+			{
+				"text": "Tu jefe no era nada más el dueño de los Cuervos",
+				"start": 7.001416900000095,
+				"end": 9.503916899999922,
+				"text-chunks": "Tu jefe no era nada más el dueño de los Cuervos",
+				"title": "clip-4"
+			},
+			{
+				"text": "tu papá era un cuervo.",
+				"start": 9.58699989999991,
+				"end": 11.088499899999988,
+				"text-chunks": "tu papá era un cuervo",
+				"title": "clip-5"
+			}
+		],
+		"offset": 0
+	}
+}
