@@ -12,7 +12,9 @@
   function deleteText(){
     socket.emit('type-delete');
   }
-
+  function runPython() {
+    socket.emit('runPython');
+  }
   socket.on('video-selector', (titles) => {
     for (var title of titles) {
       $('#video-selector').append(`<button class="title-selector" val="${title}">${title}</button>`)
@@ -98,6 +100,9 @@
       socket.emit('type-word', $("#text-area").val());
     });
   });
+  
+
+
   </script>
 </head>
 <body>
@@ -107,6 +112,8 @@
   <textarea id="text-area"></textarea>
   <button id="submit-button">Submit</button>
   <div id="video-selector"></div>
+  <br>
+  <button onclick="runPython()">Run Python</button>
   <br><br>
   <div id="videos"></div>
   <form id="radio-buttons-start"></form>

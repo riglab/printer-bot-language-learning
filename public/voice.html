@@ -114,6 +114,7 @@
     <select id="select_dialect"></select>
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 <script>
 var langs =
 [['Afrikaans',       ['af-ZA']],
@@ -178,6 +179,7 @@ var langs =
                      ['yue-Hant-HK', '粵語 (香港)']],
  ['日本語',           ['ja-JP']],
  ['Lingua latīna',   ['la']]];
+const socket = io();
 
 for (var i = 0; i < langs.length; i++) {
   select_language.options[i] = new Option(langs[i][0], i);
@@ -267,6 +269,7 @@ if (!('webkitSpeechRecognition' in window)) {
       if (event.results[i].isFinal) {
         final_transcript += event.results[i][0].transcript;
         final_transcript += '\n\n';
+        socket.emit('voice-recog', event.results[i][0].transcript+'\n\n');
       } else {
         interim_transcript += event.results[i][0].transcript;
       }

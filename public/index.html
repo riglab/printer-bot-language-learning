@@ -149,8 +149,39 @@ socket.on('type-word', function(word, subtitles){
       lifeLike: false
     })
     .tiType(word);
+  } else {
+    if (!$("#text-area").length) {
+      var textArea = '<div id="text-area"></div>';
+      $("#start").after(textArea);
+      $(".video").remove();
+    }
+    $('#text-area').typeIt({
+      speed: 50,
+      autoStart: false,
+      lifeLike: false
+    })
+    .tiType(word)
   }
   say(word);
+})
+
+socket.on('voice-recog', function(word){
+  $("#start").html('');
+  if (!$("#text-area").length) {
+    var textArea = '<div id="text-area"></div>';
+  }
+  $("#start").html(textArea);
+  console.log('recognized voice is: ' + word);
+
+  $("#start").after(textArea);
+  $(".video").remove();
+
+  $('#text-area').typeIt({
+    speed:50,
+    autoStart: false,
+    lifeLike: false
+  })
+  .tiType(word);
 })
 </script>
 </head>

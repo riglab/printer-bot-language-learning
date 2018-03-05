@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
-
+const PythonShell = require('python-shell');
 var options = {
 	//pfx: fs.readFileSync('seiyuu.pfx')
 	key: fs.readFileSync('privkey.pem'),
@@ -47,6 +47,20 @@ io.on('connection', function(socket){
   });
   socket.on('type-word', function(text, subtitles){
     io.sockets.emit('type-word', text, subtitles);
+  });
+  socket.on('voice-recog', function(word){
+    io.sockets.emit('voice-recog',word);
+  });
+  socket.on('runPython', function(){
+    PythonShell.run('helloworld.py', function (err) {
+    if (err) throw err;
+    console.log('finished');
+    })
+    var pyshell = new PythonShell('helloworld.py');
+    pyshell.on('message', function (message) {
+      // received a message sent from the Python script (a simple "print" statement)
+    console.log(message);
+    });
   });
 });
 
