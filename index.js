@@ -13,6 +13,12 @@ var server = require('https').createServer(options, app);
 var io = require('socket.io')(server);
 app.use(express.static('public'));
 
+// add ejs
+// app.get('/voice-recognizer', (req, res) => {
+//  const participantId = req.query.id;
+//  res.render('');
+// });
+
 io.on('connection', function(socket){
 		const captions = JSON.parse(fs.readFileSync('public/captions.json'));
 	  // socket.emit('captions', captions[video]);
