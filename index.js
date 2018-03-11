@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const PythonShell = require('python-shell');
+const ejs = require('ejs');
 var options = {
 	//pfx: fs.readFileSync('seiyuu.pfx')
 	key: fs.readFileSync('privkey.pem'),
@@ -13,12 +14,23 @@ var server = require('https').createServer(options, app);
 var io = require('socket.io')(server);
 app.use(express.static('public'));
 
-// add ejs
-// app.get('/voice-recognizer', (req, res) => {
-//  const participantId = req.query.id;
-//  res.render('');
-// });
+app.set('view engine', 'ejs');
+app.get('/voice-recognizer', (req, res) => {
+  req.setTimeout(0)
+  const participantId = req.query.id;
+  const messageFile = fs.readFileSync('test.txt');
+  res.send(messageFile.toString());
+  //res.render('test', { stuffFromServer: messageFile, pid: participantId });
+});
 
+app.get('/writeTxt', (req, res) => {
+  req.setTimeout(0)
+  const participantId = req.query.id;
+  fs.appendFile('test.txt', req.query.msg, function (err) {
+  if (err) throw err;
+  console.log('Saved!');
+  });
+});
 io.on('connection', function(socket){
 		const captions = JSON.parse(fs.readFileSync('public/captions.json'));
 	  // socket.emit('captions', captions[video]);
