@@ -210,6 +210,7 @@ var recognizing = false;
 var ignore_onend = false;
 var start_timestamp;
 var textLength;
+var forceStop = 0;
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
@@ -219,6 +220,7 @@ if (!('webkitSpeechRecognition' in window)) {
   recognition.interimResults = true;
 
   recognition.onstart = function() {
+    forceStop = 0;
     recognizing = true;
     showInfo('info_speak_now');
     start_img.src = 'mic-animate.gif';
@@ -255,8 +257,10 @@ if (!('webkitSpeechRecognition' in window)) {
   };
 
   recognition.onend = function() {
-    console.log('onend')
     recognizing = false;
+    if (!forceStop) {
+      recognition.start();
+    }
     if (ignore_onend) {
       return;
     }
@@ -321,6 +325,7 @@ function capitalize(s) {
 
 function startButton(event) {
   if (recognizing) {
+    forceStop = 1;
     recognition.stop();
     return;
   }
