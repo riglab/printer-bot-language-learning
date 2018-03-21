@@ -211,6 +211,10 @@ var ignore_onend = false;
 var start_timestamp;
 var textLength;
 var forceStop = 0;
+function getTime() {
+  var dt = new Date();
+  return dt.toLocaleString();
+}
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
@@ -282,10 +286,11 @@ if (!('webkitSpeechRecognition' in window)) {
     console.log(event);
     var interim_transcript = '';
     for (var i = event.resultIndex; i < event.results.length; ++i) {
+      temp = getTime() + ": "+ event.results[i][0].transcript;
       if (event.results[i].isFinal) {
-        final_transcript += event.results[i][0].transcript;
+        final_transcript += temp;
         final_transcript += '\n\n';
-        $.get( "/writeTxt?id=1&msg=" +(event.results[i][0].transcript+'%0A'));
+        $.get( "/writeTxt?id=1&msg=" +temp+'%0A');
       } else {
         interim_transcript += event.results[i][0].transcript;
       }
