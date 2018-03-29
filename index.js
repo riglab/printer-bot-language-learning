@@ -82,7 +82,7 @@ io.on('connection', function(socket){
       mode: 'text',
       args: [chunk]
     };
-    PythonShell.run('printer.py', options, function (err, results) {
+    PythonShell.run('src/printer.py', options, function (err, results) {
       if (err) throw err;
       // results is an array consisting of messages collected during execution
       console.log('results: %j', results);
