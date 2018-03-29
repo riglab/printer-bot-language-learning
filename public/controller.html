@@ -102,6 +102,7 @@
     });
     $(".eng-end-chunk").click(function(){
       var chunk = $(this).val();
+      console.log(chunk);
       socket.emit('printer', chunk);
     });
 
