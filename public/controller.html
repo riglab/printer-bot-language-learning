@@ -101,8 +101,7 @@
       socket.emit('type-word', output, subtitles);
     });
     $(".eng-end-chunk").click(function(){
-      var chunk = $(this).val();
-      console.log(chunk);
+      var chunk = $(this).button();
       socket.emit('printer', chunk);
     });
 
