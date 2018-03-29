@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const PythonShell = require('python-shell');
-const ejs = require('ejs');
 var options = {
 	//pfx: fs.readFileSync('seiyuu.pfx')
 	key: fs.readFileSync('privkey.pem'),
@@ -13,8 +12,6 @@ var options = {
 var server = require('https').createServer(options, app);
 var io = require('socket.io')(server);
 app.use(express.static('public'));
-
-app.set('view engine', 'ejs');
 app.get('/voice-recognizer', (req, res) => {
   req.setTimeout(0)
   const participantId = req.query.id;
