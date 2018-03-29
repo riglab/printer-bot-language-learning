@@ -5,7 +5,7 @@
   let captions = null;
   let videos = null;
   const socket = io();
-
+  const instruction = "Listen to the following video clip and repeat what your hear aloud"
   function intro(){
     socket.emit('type-intro');
   }
@@ -15,6 +15,10 @@
   function runPython() {
     socket.emit('runPython');
   }
+  function instn() {
+    socket.emit('type-word', instruction);
+  }
+
   socket.on('video-selector', (titles) => {
     for (var title of titles) {
       $('#video-selector').append(`<button class="title-selector" val="${title}">${title}</button>`)
@@ -25,7 +29,14 @@
       socket.emit('captions', title);
     });
   });
-
+  function changeColor(color) {
+    if (color === 'red') {
+      socket.emit('type-word', 'Try Again :(');
+    } else {
+      socket.emit('type-word', 'GOOD JOB!');
+    }
+    socket.emit('changeColor', color)
+  }
   socket.on('captions', (_captions) => {
     $('#videos').html('');
     $('#radio-buttons-start').html('');
@@ -44,32 +55,47 @@
 
     var globalChunks = [];
     var n = 0;
+    var m = 1;
     for (var caption of captions.lines) {
       caption.chunks = caption['text-chunks'].split('/');
+      caption.eng_chunks = caption['en-text-chunks'].split('/');
+      $('#radio-buttons-end').append(`<div id="caption${m}">clip ${m} Espanol: </div>
+      <div id="eng_caption${m}">clip ${m} English: </div><br>`)
       for (var chunk of caption.chunks){
-        $('#radio-buttons-start').append(`<input type="radio"
-        name="chunk" value="${n}">
-        <label for="contactChoice1">${chunk}</label>`)
-
-        $('#radio-buttons-end').append(`<button class="end-chunk" chunk="${n}">${chunk}</button>`)
+        // $('#radio-buttons-start').append(`<input type="radio"
+        // name="chunk" value="${n}">
+        // <label for="contactChoice1">${chunk}</label>`)
+        $('#caption'+m).append(`<button class="end-chunk" chunk="${n}">${chunk}</button>`)
         globalChunks.push(chunk);
         n++;
       }
+      $('#caption'+m).append(`<br>`)
+      for (var chunk of caption.eng_chunks){
+        // $('#radio-buttons-start').append(`<input type="radio"
+        // name="chunk" value="${n}">
+        // <label for="contactChoice1">${chunk}</label>`)
+        $('#eng_caption'+m).append(`<button class="end-chunk" chunk="${n}">${chunk}</button>`)
+        globalChunks.push(chunk);
+        n++;
+      }
+      m++;
     }
 
     $(".end-chunk").click(function(){
       var subtitles = "false";
-      if ($('input[name="subtitles"]:checked').val()) {
-        subtitles = "true"
-      }
+      // if ($('input[name="subtitles"]:checked').val()) {
+        // subtitles = "true"
+      // }
       const chunkIndex = $(this).attr('chunk');
-      var value = $('input[name="chunk"]:checked').val();
-      var output = '';
-      for (var i = Number(value); i < Number(chunkIndex) + 1; i++) {
-        console.log(globalChunks[i]);
-        output += String(globalChunks[i]) + ' ';
-      }
-      console.log('value: ' + value);
+      // var value = $('input[name="chunk"]:checked').val();
+      // var value = $(this).val()
+      // var output = '';
+      // for (var i = Number(value); i < Number(chunkIndex) + 1; i++) {
+        // console.log(globalChunks[i]);
+        // output += String(globalChunks[i]) + ' ';
+      // }
+      output = globalChunks[chunkIndex]
+      // console.log('value: ' + value);
       console.log('chunkIndex: ' + chunkIndex);
       console.log('output: ' + output);
       socket.emit('type-word', output, subtitles);
@@ -99,8 +125,9 @@
     $("#submit-button").click(function(){
       socket.emit('type-word', $("#text-area").val());
     });
+
   });
-  
+
 
 
   </script>
@@ -113,7 +140,11 @@
   <button id="submit-button">Submit</button>
   <div id="video-selector"></div>
   <br>
+  <button onclick="changeColor('lime')">GOOD JOB!</button>
+  <button onclick="changeColor('red')">Try again</button>
   <button onclick="runPython()">Run Python</button>
+  <br>
+  <button onclick="instn()">Instruction</button>
   <br><br>
   <div id="videos"></div>
   <form id="radio-buttons-start"></form>

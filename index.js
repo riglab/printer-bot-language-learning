@@ -80,6 +80,9 @@ io.on('connection', function(socket){
     console.log(message);
     });
   });
+  socket.on('changeColor', function(color){
+    io.sockets.emit('changeColor',color);
+  });
 });
 
 server.listen(3000, function () {

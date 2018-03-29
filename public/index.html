@@ -64,6 +64,30 @@
     .tiType(text.def)
   });
 
+  socket.on('changeColor', function(color){
+    
+    var x;
+
+    function changecolors() {
+        x = 0;
+        setInterval(change, 500);
+    }
+    function change() {
+        if (x < 10) {
+          if (x%2 === 0) {
+              b_color = color;
+          } else {
+              b_color = 'none';
+          }
+          x++
+          document.body.style.background = b_color;
+        }
+
+    }
+    changecolors();
+    document.body.style.background = 'none';
+  });
+
   socket.on('play-video', function(video, start, duration){
     $("#text-area").remove();
     $("#start").html('');
