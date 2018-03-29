@@ -77,6 +77,17 @@ io.on('connection', function(socket){
     console.log(message);
     });
   });
+  socket.on('printer', function(chunk){
+    var options = {
+      mode: 'text',
+      args: [chunk]
+    };
+    PythonShell.run('script.py', options, function (err, results) {
+      if (err) throw err;
+      // results is an array consisting of messages collected during execution
+      console.log('results: %j', results);
+    });
+  });
   socket.on('changeColor', function(color){
     io.sockets.emit('changeColor',color);
   });

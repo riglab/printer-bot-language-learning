@@ -74,7 +74,7 @@
         // $('#radio-buttons-start').append(`<input type="radio"
         // name="chunk" value="${n}">
         // <label for="contactChoice1">${chunk}</label>`)
-        $('#eng_caption'+m).append(`<button class="end-chunk" chunk="${n}">${chunk}</button>`)
+        $('#eng_caption'+m).append(`<button class="eng-end-chunk" chunk="${n}">${chunk}</button>`)
         globalChunks.push(chunk);
         n++;
       }
@@ -99,6 +99,10 @@
       console.log('chunkIndex: ' + chunkIndex);
       console.log('output: ' + output);
       socket.emit('type-word', output, subtitles);
+    });
+    $(".eng-end-chunk").click(function(){
+      const chunk = $(this).val();
+      socket.emit('printer', chunk);
     });
 
     $(".play-video").click(function(){
