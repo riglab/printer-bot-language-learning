@@ -78,6 +78,7 @@ io.on('connection', function(socket){
     });
   });
   socket.on('printer', function(chunk){
+    console.log(chunk);
     var options = {
       mode: 'text',
       args: [chunk]
