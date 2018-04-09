@@ -30,7 +30,7 @@
     });
   });
   function changeColor(color) {
-    if (color === 'red') {
+    if (color === 'pink') {
       socket.emit('type-word', 'Try Again :(');
     } else {
       socket.emit('type-word', 'GOOD JOB!');
@@ -144,8 +144,8 @@
   <button id="submit-button">Submit</button>
   <div id="video-selector"></div>
   <br>
-  <button onclick="changeColor('lime')">GOOD JOB!</button>
-  <button onclick="changeColor('red')">Try again</button>
+  <button onclick="changeColor('LightGreen')">GOOD JOB!</button>
+  <button onclick="changeColor('pink')">Try again</button>
   <button onclick="runPython()">Run Python</button>
   <br>
   <button onclick="instn()">Instruction</button>

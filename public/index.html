@@ -2,6 +2,7 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.typeit/4.4.0/typeit.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/text.css">
   <script>
@@ -65,27 +66,15 @@
   });
 
   socket.on('changeColor', function(color){
-    
-    var x;
 
-    function changecolors() {
-        x = 0;
-        setInterval(change, 500);
+    function changeBack() {
+      socket.emit('type-delete');
+      // $('document.body').animate({backgroundColor: 'none'}, 'slow');
+      document.body.style.background = 'none'
     }
-    function change() {
-        if (x < 10) {
-          if (x%2 === 0) {
-              b_color = color;
-          } else {
-              b_color = 'none';
-          }
-          x++
-          document.body.style.background = b_color;
-        }
-
-    }
-    changecolors();
-    document.body.style.background = 'none';
+    // $('document.body').animate({backgroundColor: color}, 'slow');
+    document.body.style.background = color
+    setTimeout(changeBack, 5000);
   });
 
   socket.on('play-video', function(video, start, duration){
