@@ -34,9 +34,14 @@
     $('#text-area').typeIt({
       speed: 50,
       autoStart: false,
-      lifeLike: false
+      lifeLike: false,
+      strings: "Tom",
+      afterComplete: function (instance) {
+        console.log(1)
+        $("#start").html('<div id="micimg"><img id="mic_img" src="mic-animate.gif" alt="mic"></div>');
+      }
     })
-    .tiType('Tom')
+    .tiType('')
   });
 
   socket.on('type-delete', function(){
@@ -48,6 +53,12 @@
     })
     .tiDelete()
   });
+
+  socket.on('mic', function(){
+    $("#start").html('<div id="micimg"><img id="mic_img" src="mic-animate.gif" alt="mic"></div>');
+    // var micimg = '<div id="micimg"><img id="mic_img" src="mic-animate.gif" alt="mic"></div>';
+    // $("#start").after(micimg);
+  })
 
   socket.on('type-word-with-def', function(text){
     $("#start").html('');
@@ -201,13 +212,9 @@ socket.on('voice-recog', function(word){
 </head>
 
 <body>
-  <div id="start"></div>
+  <div id="start">
+  </div>
   <div id="text-area"></div>
-  <!-- <div style="display:none">
-  <p begin="14873608749t" end="14901136249t" region="bottomCenter" style="s1" xml:id="subtitle382">...las dos sabemos que Chava<br/>no está listo para ser presidente.</p>
-  <p begin="14901967079t" end="14918653749t" region="bottomCenter" style="s1" xml:id="subtitle383">Tarde o temprano la va a cagar.</p>
-  <p begin="14919484579t" end="14945350419t" region="bottomCenter" style="s1" xml:id="subtitle384">Tú espérate y te vas ganando el puesto<br/>poco a poco.</p>
-</div> -->
 </body>
 
 <script>

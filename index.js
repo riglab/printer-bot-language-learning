@@ -51,6 +51,10 @@ io.on('connection', function(socket){
   socket.on('type-intro', function(){
     io.sockets.emit('type-intro');
   });
+
+  socket.on('mic', function(){
+    io.sockets.emit('mic');
+  });
   socket.on('type-delete', function(){
     io.sockets.emit('type-delete');
   });

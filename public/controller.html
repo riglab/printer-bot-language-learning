@@ -99,6 +99,7 @@
       console.log('chunkIndex: ' + chunkIndex);
       console.log('output: ' + output);
       socket.emit('type-word', output, subtitles);
+      socket.emit('mic')
     });
     $(".eng-end-chunk").click(function(){
       var chunk = $(this).text();
