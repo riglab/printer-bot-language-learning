@@ -31,9 +31,11 @@
   });
   function changeColor(color) {
     if (color === 'pink') {
-      socket.emit('type-word', 'Try Again :(');
+      // socket.emit('type-word', 'Try Again :(');
+      socket.emit('shake');
     } else {
-      socket.emit('type-word', 'GOOD JOB!');
+      // socket.emit('type-word', 'GOOD JOB!');
+      socket.emit('nod');
     }
     socket.emit('changeColor', color)
   }
