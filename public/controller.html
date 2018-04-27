@@ -22,7 +22,7 @@
     socket.emit('type-word', '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
     socket.emit('mic', instruction);
   }
-  function return() {
+  function returnto() {
     socket.emit('return');
   }
   function offerandreturn() {
@@ -168,7 +168,7 @@
   <button onclick="instn()">Instruction</button>
   <br><br>
   <button onclick="dot()">Prompt Dot</button>
-  <button onclick="return()">return</button>
+  <button onclick="returnto()">return</button>
   <button onclick="offer()">Offer</button>
   <button onclick="offerandreturn()">Offer and return</button>
   <br><br>
