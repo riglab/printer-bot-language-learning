@@ -83,25 +83,11 @@ io.on('connection', function(socket){
   });
   socket.on('nod', function(){
     PythonShell.run('../spyderbot/nod.py', function (err) {
-    if (err) throw err;
-    console.log('finished');
     })
-    var pyshell = new PythonShell('helloworld.py');
-    pyshell.on('message', function (message) {
-      // received a message sent from the Python script (a simple "print" statement)
-    console.log(message);
-    });
   });
   socket.on('shake', function(){
     PythonShell.run('../spyderbot/shake.py', function (err) {
-    if (err) throw err;
-    console.log('finished');
     })
-    var pyshell = new PythonShell('helloworld.py');
-    pyshell.on('message', function (message) {
-      // received a message sent from the Python script (a simple "print" statement)
-    console.log(message);
-    });
   });
   socket.on('printer', function(chunk){
     console.log(chunk);
