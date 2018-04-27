@@ -35,13 +35,8 @@
       speed: 50,
       autoStart: false,
       lifeLike: false,
-      strings: "Tom",
-      afterComplete: function (instance) {
-        console.log(1)
-        $("#start").html('<div id="micimg"><img id="mic_img" src="mic-animate.gif" alt="mic"></div>');
-      }
     })
-    .tiType('')
+    .tiType('Tom')
   });
 
   socket.on('type-delete', function(){
@@ -55,9 +50,15 @@
   });
 
   socket.on('mic', function(){
-    $("#start").html('<div id="micimg"><img id="mic_img" src="mic-animate.gif" alt="mic"></div>');
-    // var micimg = '<div id="micimg"><img id="mic_img" src="mic-animate.gif" alt="mic"></div>';
-    // $("#start").after(micimg);
+    var op = $(".ti-cursor").css("opacity")
+    var dot = `<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot">●</span>`
+    $(".ti-container").after(dot)
+    $(".ti-cursor").hide()
+    setInterval (function(){
+      var op = $(".ti-cursor").css("opacity")
+      $(".ti-dot").html(`<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot">●</span>`)
+      $(".ti-cursor").hide()
+    }, 1)
   })
 
   socket.on('type-word-with-def', function(text){
@@ -159,6 +160,8 @@ socket.on('type-word', function(word, subtitles){
   if (!$("#text-area").length) {
     var textArea = '<div id="text-area"></div>';
   }
+
+  $(".ti-dot").remove()
   $("#start").html(textArea);
   console.log('subtitles is: ' + subtitles);
   if (subtitles == "true") {
