@@ -18,6 +18,10 @@
   function instn() {
     socket.emit('type-word', instruction);
   }
+  function dot() {
+    socket.emit('type-word', '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
+    socket.emit('mic', instruction);
+  }
 
   socket.on('video-selector', (titles) => {
     for (var title of titles) {
@@ -154,6 +158,8 @@
   <button onclick="runPython()">Run Python</button>
   <br>
   <button onclick="instn()">Instruction</button>
+  <br><br>
+  <button onclick="dot()">Prompt Dot</button>
   <br><br>
   <div id="videos"></div>
   <form id="radio-buttons-start"></form>
