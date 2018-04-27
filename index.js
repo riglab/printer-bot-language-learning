@@ -89,6 +89,18 @@ io.on('connection', function(socket){
     PythonShell.run('../spyderbot/shake.py', function (err) {
     })
   });
+  socket.on('offer', function(){
+    PythonShell.run('../spyderbot/offer.py', function (err) {
+    })
+  });
+  socket.on('return', function(){
+    PythonShell.run('../spyderbot/alert.py', function (err) {
+    })
+  });
+  socket.on('offerandreturn', function(){
+    PythonShell.run('../spyderbot/offerAndReturn.py', function (err) {
+    })
+  });
   socket.on('printer', function(chunk){
     console.log(chunk);
     var options = {
