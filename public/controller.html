@@ -125,6 +125,15 @@
         n++;
       }
       $('#caption'+m).append(`<br>`)
+      for (var chunk of caption.chunks){
+        // $('#radio-buttons-start').append(`<input type="radio"
+        // name="chunk" value="${n}">
+        // <label for="contactChoice1">${chunk}</label>`)
+        $('#caption'+m).append(`<button class="second-task-chunk" chunk="${n}">${chunk}</button>`)
+        globalChunks.push(chunk);
+        n++;
+      }
+      $('#caption'+m).append(`<br>`)
       for (var chunk of caption.eng_chunks){
         // $('#radio-buttons-start').append(`<input type="radio"
         // name="chunk" value="${n}">
@@ -161,6 +170,14 @@
     $(".eng-end-chunk").click(function(){
       var chunk = $(this).text();
       socket.emit('printer', chunk);
+    });
+    $(".second-task-chunk").click(function(){
+      var chunk = 'seond tast';
+      socket.emit('type-word', 'Repeat the chunk without looking at it.');
+      setTimeout(function(){
+          socket.emit('type-word', $(this).text());
+          setTimeout(dot(), 3000)
+      }, 3000);
     });
 
     $(".play-video").click(function(){
