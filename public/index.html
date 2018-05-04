@@ -1,5 +1,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <head>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
@@ -51,12 +52,16 @@
 
   socket.on('mic', function(){
     var op = $(".ti-cursor").css("opacity")
-    var dot = `<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot">🎤</span>`
+    var dot = `<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot"><i class="fas fa-microphone"></i>
+
+</span>`
     $(".ti-container").after(dot)
     $(".ti-cursor").hide()
     setInterval (function(){
       var op = $(".ti-cursor").css("opacity")
-      $(".ti-dot").html(`<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot">🎤</span>`)
+      $(".ti-dot").html(`<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot"><i class="fas fa-microphone"></i>
+
+</span>`)
       $(".ti-cursor").hide()
     }, 1)
   })
