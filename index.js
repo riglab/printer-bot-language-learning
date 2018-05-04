@@ -86,7 +86,7 @@ io.on('connection', function(socket){
     })
   });
   socket.on('metanod', function(){
-    PythonShell.run('../spyderbot/metanod.py', function (err) {
+    PythonShell.run('../spyderbot/nod.py', function (err) {
     })
   });
   socket.on('shake', function(){
