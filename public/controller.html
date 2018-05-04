@@ -29,8 +29,9 @@
   }
   function preinstn() {
     socket.emit('type-word', '1. Every time you get a phrase right, the robot offers you a English translation. After completing a full video, feel free to tear it off.');
-    socket.emit('printer', "Hi, how are you!");
+
     setTimeout(function(){
+        socket.emit('printer', "Hi, how are you!");
         socket.emit('type-delete');
         socket.emit('type-word', '2. Start repeating the video after you see the red dot')
         setTimeout(function(){
