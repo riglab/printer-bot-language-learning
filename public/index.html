@@ -51,12 +51,12 @@
 
   socket.on('mic', function(){
     var op = $(".ti-cursor").css("opacity")
-    var dot = `<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot">●</span>`
+    var dot = `<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot">🎤</span>`
     $(".ti-container").after(dot)
     $(".ti-cursor").hide()
     setInterval (function(){
       var op = $(".ti-cursor").css("opacity")
-      $(".ti-dot").html(`<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot">●</span>`)
+      $(".ti-dot").html(`<span style="display:inline;position:relative;font:inherit;color:red; opacity:${op}" class="ti-dot">🎤</span>`)
       $(".ti-cursor").hide()
     }, 1)
   })
