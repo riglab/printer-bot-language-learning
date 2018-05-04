@@ -115,6 +115,7 @@
       caption.chunks = caption['text-chunks'].split('/');
       caption.eng_chunks = caption['en-text-chunks'].split('/');
       $('#radio-buttons-end').append(`<div id="caption${m}">clip ${m} Espanol: </div>
+      <div id="second${m}">clip ${m} second task: </div>
       <div id="eng_caption${m}">clip ${m} English: </div><br>`)
       for (var chunk of caption.chunks){
         // $('#radio-buttons-start').append(`<input type="radio"
@@ -172,7 +173,6 @@
       socket.emit('printer', chunk);
     });
     $(".second-task-chunk").click(function(){
-      var chunk = 'seond tast';
       socket.emit('type-word', 'Repeat the chunk without looking at it.');
       setTimeout(function(){
           socket.emit('type-word', $(this).text());
