@@ -101,9 +101,10 @@
     content = captions.content;
 
     $('#videos').append('<button class="play-video" content="' + content + '" start="' + captions.lines[0]['start'] + '" duration="' + ((captions.lines[captions.lines.length - 1]['end']) - captions.lines[0]['start']) + '">Entire Video</button>');
-
+    i = 1
     for (var line of captions.lines) {
-      $('#videos').append('<button class="play-video" content="' + content + '" start="' + line.start + '" duration="' + (line.end-line.start) + '">' + line.title + '</button>');
+      $('#videos').append('<button class="play-video" id="clip' + i +'"content="' + content + '" start="' + line.start + '" duration="' + (line.end-line.start) + '">' + line.title + '</button>');
+      i++;
     }
 
     $('#videos').append('<input type="checkbox" name="subtitles" value="true">Subtitles</input>');
@@ -173,11 +174,33 @@
       socket.emit('printer', chunk);
     });
     $(".second-task-chunk").click(function(){
+      const chunkIndex = $(this).attr('chunk');
+
       socket.emit('type-word', 'Repeat the chunk without looking at it.');
+      var taskid = $(this).parent().attr('id');
+      var clipnum = taskid.slice(-1);
       setTimeout(function(){
-          socket.emit('type-word', $(this).text());
-          setTimeout(dot(), 3000)
+          var duration = parseFloat($('#clip'+clipnum).attr('duration'));
+          $('#clip'+clipnum).click();
+          setTimeout(function(){
+            console.log(chunkIndex);
+            var text = '';
+            $('#'+taskid).children('button').each(function () {
+              // alert($(this).attr('chunk'));
+              if ($(this).attr('chunk') == chunkIndex) {
+                text += ' ______ '
+              } else {
+                text += $(this).text();
+              }
+              console.log(text);
+            });
+            socket.emit('type-word', text);
+          }, duration*1000*1.5);
       }, 3000);
+      // setTimeout(function(){
+      //     socket.emit('type-word', $(this).text());
+      //     setTimeout(dot(), 3000)
+      // }, 3000);
     });
 
     $(".play-video").click(function(){
@@ -185,6 +208,7 @@
       const start = $(this).attr('start');
       const duration = $(this).attr('duration');
       socket.emit('play-video', video, start, duration);
+      return duration;
     });
   });
 
