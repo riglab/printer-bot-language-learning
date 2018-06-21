@@ -31,7 +31,7 @@
   function preinstn() {
     socket.emit('type-word', 'Listen to the videos I show you and repeat what you hear aloud when you see the red dot');
     setTimeout(function(){
-        socket.emit('type-word', 'Try saying "Hello Pigu"');
+        socket.emit('type-word', 'Try saying "Hello Pingu"');
         setTimeout(function(){
           socket.emit('mic');
         }, 'Try saying "Hello Pingu"'.length*100);
