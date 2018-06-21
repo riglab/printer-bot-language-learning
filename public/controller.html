@@ -33,7 +33,7 @@
         socket.emit('type-word', 'Try saying "Hello Pigu"');
         setTimeout(function(){
           socket.emit('mic');
-        }, 'Try saying "Hello Pigu"'.length*100);
+        }, 'Try saying "Hello Pingu"'.length*100);
     }, 'Listen to the videos I show you and repeat what you hear aloud when you see the red dot'.length*80);
 
 
@@ -190,7 +190,7 @@
               if ($(this).attr('chunk') == chunkIndex) {
                 text += ' ______ '
               } else {
-                text += $(this).text();
+                text += $(this).text() + " ";
               }
               console.log(text);
             });
