@@ -235,35 +235,148 @@
 
   var clip_count = -1;
   var video_clips = [];
-  var state = 2;
+  var first_tasks = [];
+  var snd_tasks = [];
+  var prints = [];
+  const INIT_STATE = 0;
+  const INSTN = 1;
+  const PLAY_CLIP = 2;
+  const FLASH_MIC = 3;
+  const FIRST_TASK = 4;
+  const SECOND_TASK = 5;
+  const CORRECT_FIRST = 6;
+  const WRONG_FIRST = 7;
+  const PRINT = 8;
+  const OFFER = 9;
+  const CORRECT_SND = 10;
+  const WRONG_SND = 11;
+
+  var state = INIT_STATE;
+  var prev = INIT_STATE;
   function forward() {
-    console.log(video_clips);
+    console.log(state);
     if (video_clips.length == 0) {
       video_clips = $('.play-video').toArray();
       video_clips.shift();
-
     }
-    if (state == 2) {
+    if (first_tasks.length == 0) {
+      first_tasks = $('.end-chunk').toArray();
+    }
+    if (snd_tasks.length == 0) {
+      snd_tasks = $('.second-task-chunk').toArray();
+    }
+    if (prints.length == 0) {
+      prints = $('.eng-end-chunk').toArray();
+    }
+    if (state == INIT_STATE) {
       instn();
-      state -= 1;
+      state = INSTN;
+      prev = INIT_STATE;
       return;
     }
-    if (state == 1) {
+    if (state == INSTN) {
+
       video_clips.shift().click();
-      state -= 1;
+      state = PLAY_CLIP;
+      // prev = INSTN;
       return;
     }
-    if (state == 0) {
-      dot()
-      state = 2;
+    if (state == PLAY_CLIP) {
+      dot();
+      state = FLASH_MIC;
+      // prev = PLAY_CLIP;
       return;
     }
-
-
-
+    if (state == FLASH_MIC) {
+      first_tasks.shift().click();
+      state = FIRST_TASK;
+      // prev = FLASH_MIC;
+      return;
+    }
+    if (state == FIRST_TASK) {
+      changeColor('LightGreen');
+      state = CORRECT_FIRST;
+      return;
+    }
+    if (state == CORRECT_FIRST) {
+      console.log(snd_tasks);
+      snd_tasks.shift().click();
+      state = SECOND_TASK;
+      return;
+    }
+    if (state == SECOND_TASK) {
+      changeColor('LightGreen');
+      state = CORRECT_SND;
+      return;
+    }
+    if (state == CORRECT_SND) {
+      prints.shift().click();
+      state = PRINT;
+      return;
+    }
+    if (state == PRINT) {
+      first_tasks.shift().click();
+      state = FIRST_TASK;
+      return;
+    }
 
   }
-
+  function backward() {
+    // if (state == INIT_STATE) {
+    //
+    //   state = INSTN;
+    //   // prev = INIT_STATE;
+    //   return;
+    // }
+    // if (state == INSTN) {
+    //
+    //
+    //   state = INIT_STATE;
+    //   // prev = INSTN;
+    //   return;
+    // }
+    // if (state == PLAY_CLIP) {
+    //   instn();
+    //
+    //   state = INSTN;
+    //   // prev = PLAY_CLIP;
+    //   return;
+    // }
+    // if (state == FLASH_MIC) {
+    //   video_clips.shift().click();
+    //
+    //   state = PLAY_CLIP;
+    //   // prev = FLASH_MIC;
+    //   return;
+    // }
+    // if (state == FIRST_TASK) {
+    //   dot();
+    //   state = FLASH_MIC;
+    //   return;
+    // }
+    // if (state == CORRECT_FIRST) {
+    //   changeColor('LightGreen');
+    //
+    //   state = FIRST_TASK;
+    //   return;
+    // }
+    // if (state == SECOND_TASK) {
+    //
+    //   state = CORRECT_FIRST;
+    //   return;
+    // }
+    // if (state == CORRECT_SND) {
+    //   snd_tasks.shift().click();
+    //   prints.shift().click();
+    //   state = SECOND_TASK;
+    //   return;
+    // }
+    // if (state == PRINT) {
+    //   first_tasks.shift().click();
+    //   state = FIRST_TASK;
+    //   return;
+    // }
+  }
 
   </script>
 </head>
@@ -289,8 +402,9 @@
   <button onclick="offer()">Offer</button>
   <button onclick="offerandreturn()">Offer and return</button>
   <br><br>
+
+  <button onclick="backward()">Backward</button>
   <button onclick="forward()">Forward</button>
-  <button onclick="">Backward</button>
   <br><br>
   <div id="videos"></div>
   <form id="radio-buttons-start"></form>
