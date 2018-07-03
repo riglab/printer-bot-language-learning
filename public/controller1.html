@@ -3,6 +3,18 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet">
   <script>
+  const INIT_STATE = 0;
+  const INSTN = 1;
+  const PLAY_CLIP = 2;
+  const FLASH_MIC = 3;
+  const FIRST_TASK = 4;
+  const SECOND_TASK = 5;
+  const CORRECT_FIRST = 6;
+  const WRONG_FIRST = 7;
+  const PRINT = 8;
+  const OFFER = 9;
+  const CORRECT_SND = 10;
+  const WRONG_SND = 11;
   var state = INIT_STATE;
   let captions = null;
   let videos = null;
@@ -243,24 +255,14 @@
   var first_tasks = [];
   var snd_tasks = [];
   var prints = [];
-  var temp_clip = null;
-  const INIT_STATE = 0;
-  const INSTN = 1;
-  const PLAY_CLIP = 2;
-  const FLASH_MIC = 3;
-  const FIRST_TASK = 4;
-  const SECOND_TASK = 5;
-  const CORRECT_FIRST = 6;
-  const WRONG_FIRST = 7;
-  const PRINT = 8;
-  const OFFER = 9;
-  const CORRECT_SND = 10;
-  const WRONG_SND = 11;
+
 
 
 
   var task_counter = 0
   var task_len = 0
+  var clip_counter = 0
+  var clip_len = 0
   function forward() {
 
     if (state == INIT_STATE) {
@@ -269,13 +271,13 @@
       first_tasks = $('.end-chunk').toArray();
       snd_tasks = $('.second-task-chunk').toArray();
       prints = $('.eng-end-chunk').toArray();
-
+      clip_len = video_clips.length;
       instn();
       state = INSTN;
       return;
     }
     if (state == INSTN) {
-      video_clips.shift().click();
+      video_clips[clip_counter].click();
       state = PLAY_CLIP;
       task_len = first_tasks.length;
       return;
@@ -315,9 +317,12 @@
     if (state == PRINT) {
       task_counter += 1;
       if (task_counter >= task_len) {
-        video_clips.shift().click();
-        task_counter = 0
-        state = PLAY_CLIP;
+        clip_counter += 1;
+        if (clip_counter < clip_len) {
+          video_clips[clip_counter].click();
+          task_counter = 0
+          state = PLAY_CLIP;
+        }
         return;
       }
       first_tasks[task_counter].click();
