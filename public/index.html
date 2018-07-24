@@ -12,6 +12,12 @@
     body {
       background: black;
     }
+    #text-area {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      height: 400px;
+    }
 </style>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
@@ -55,7 +61,7 @@
   });
 
   socket.on('type-delete', function(){
-    document.getElementById("mic-animate").style.display = "none";
+    // document.getElementById("mic-animate").style.display = "none";
     $("#start").html('');
     $('#text-area').typeIt({
       speed: 10,
@@ -161,6 +167,7 @@ vid.currentTime = videoStartTime;
 vid.addEventListener('timeupdate', function() {
   if(this.currentTime > Number(videoStartTime) + Number(durationTime)){
     this.pause();
+    socket.emit('type-delete');
   }
 });
 });
