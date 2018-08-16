@@ -250,15 +250,29 @@
       snd_tasks = $('.second-task-chunk').toArray();
       prints = $('.eng-end-chunk').toArray();
       clip_len = video_clips.length;
-      instn();
+      $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
+      document.getElementById("intro-recording").play();
+      socket.emit('type-word', 'Hi, I\'m Pingu');
+      setTimeout(function(){
+        socket.emit('type-delete');
+      }, 2800);
+      setTimeout(function(){
+        socket.emit('type-word', 'Ready?');
+      }, 19500);
       state = INSTN;
       return;
     }
     if (state == INSTN) {
-      video_clips[clip_counter].click();
-      state = PLAY_CLIP;
-      task_len = first_tasks.length;
-      return;
+      socket.emit('type-delete');
+      $('#recordings').append('<audio id="start-recording"><source src="./recordings/start.mp3" type="audio/mpeg"></audio>');
+      document.getElementById("start-recording").play();
+      setTimeout(function(){
+        console.log('playing the video clip');
+        video_clips[clip_counter].click();
+        state = PLAY_CLIP;
+        task_len = first_tasks.length;
+        return;
+      }, 7500);
     }
     if (state == PLAY_CLIP) {
       dot();
@@ -372,4 +386,5 @@
   <form id="radio-buttons-start"></form>
   <div id="radio-buttons-end"></div>
   <br/>
+  <div id="recordings"></div>
 </body>
