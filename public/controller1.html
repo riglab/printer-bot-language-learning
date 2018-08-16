@@ -134,27 +134,18 @@
       <div id="second${m}">clip ${m} second task: </div>
       <div id="eng_caption${m}">clip ${m} English: </div><br>`)
       for (var chunk of caption.chunks){
-        // $('#radio-buttons-start').append(`<input type="radio"
-        // name="chunk" value="${n}">
-        // <label for="contactChoice1">${chunk}</label>`)
         $('#caption'+m).append(`<button class="end-chunk" chunk="${n}">${chunk}</button>`)
         globalChunks.push(chunk);
         n++;
       }
       $('#caption'+m).append(`<br>`)
       for (var chunk of caption.chunks){
-        // $('#radio-buttons-start').append(`<input type="radio"
-        // name="chunk" value="${n}">
-        // <label for="contactChoice1">${chunk}</label>`)
         $('#second'+m).append(`<button class="second-task-chunk" chunk="${n}">${chunk}</button>`)
         globalChunks.push(chunk);
         n++;
       }
       $('#caption'+m).append(`<br>`)
       for (var chunk of caption.eng_chunks){
-        // $('#radio-buttons-start').append(`<input type="radio"
-        // name="chunk" value="${n}">
-        // <label for="contactChoice1">${chunk}</label>`)
         $('#eng_caption'+m).append(`<button class="eng-end-chunk" chunk="${n}">${chunk}</button>`)
         globalChunks.push(chunk);
         n++;
@@ -165,25 +156,15 @@
     $(".end-chunk").click(function(){
       state = FIRST_TASK;
       var subtitles = "false";
-      // if ($('input[name="subtitles"]:checked').val()) {
-        // subtitles = "true"
-      // }
+
       const chunkIndex = $(this).attr('chunk');
-      // var value = $('input[name="chunk"]:checked').val();
-      // var value = $(this).val()
-      // var output = '';
-      // for (var i = Number(value); i < Number(chunkIndex) + 1; i++) {
-        // console.log(globalChunks[i]);
-        // output += String(globalChunks[i]) + ' ';
-      // }
+
       output = globalChunks[chunkIndex]
-      // console.log('value: ' + value);
-      console.log('chunkIndex: ' + chunkIndex);
-      console.log('output: ' + output);
+
       socket.emit('type-word', output, subtitles);
-      setTimeout(function(){
-          socket.emit('mic');
-      }, output.length*100);
+      // setTimeout(function(){
+      //     socket.emit('mic');
+      // }, output.length*100);
     });
     $(".eng-end-chunk").click(function(){
       state = PRINT;
