@@ -3,9 +3,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet">
   <script>
-  const INIT_STATE = 0;
-  const INSTN = 1;
-  const PLAY_CLIP = 2;
+  const INTRO = 0;
+  const START = 1;
+  const STRUGGLED = 2;
   const FLASH_MIC = 3;
   const FIRST_TASK = 4;
   const SECOND_TASK = 5;
@@ -15,7 +15,7 @@
   const OFFER = 9;
   const CORRECT_SND = 10;
   const WRONG_SND = 11;
-  var state = INIT_STATE;
+  var state = INTRO;
   let captions = null;
   let videos = null;
   const socket = io();
@@ -243,39 +243,56 @@
   var clip_len = 0
   function forward() {
     console.log(state);
-    if (state == INIT_STATE) {
+    if (state == INTRO) {
       video_clips = $('.play-video').toArray();
       video_clips.shift();
       first_tasks = $('.end-chunk').toArray();
       snd_tasks = $('.second-task-chunk').toArray();
       prints = $('.eng-end-chunk').toArray();
       clip_len = video_clips.length;
-      $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
-      document.getElementById("intro-recording").play();
-      socket.emit('type-word', 'Hi, I\'m Pingu');
-      setTimeout(function(){
-        socket.emit('type-delete');
-      }, 2800);
-      setTimeout(function(){
-        socket.emit('type-word', 'Ready?');
-      }, 19500);
-      state = INSTN;
+      // $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
+      // document.getElementById("intro-recording").play();
+      // socket.emit('type-word', 'Hi, I\'m Pingu');
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      // }, 2800);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'Ready?');
+      // }, 19500);
+      state = START;
       return;
     }
-    if (state == INSTN) {
+    if (state == START) {
       socket.emit('type-delete');
       $('#recordings').append('<audio id="start-recording"><source src="./recordings/start.mp3" type="audio/mpeg"></audio>');
       document.getElementById("start-recording").play();
       setTimeout(function(){
+        socket.emit('type-word', 'repeat');
+        return;
+      }, 4200);
+      setTimeout(function(){
         console.log('playing the video clip');
         video_clips[clip_counter].click();
-        state = PLAY_CLIP;
         task_len = first_tasks.length;
+        setTimeout(function(){
+          $('#recordings').append('<audio id="what-said-recording"><source src="./recordings/what_said.mp3" type="audio/mpeg"></audio>');
+          document.getElementById("what-said-recording").play();
+          socket.emit('type-word', 'what was said?');
+          state = STRUGGLED;
+          return;
+        }, 4000);
         return;
       }, 7500);
     }
-    if (state == PLAY_CLIP) {
-      dot();
+    if (state == STRUGGLED) {
+      socket.emit('type-delete');
+      $('#recordings').append('<audio id="not_quite-recording"><source src="./recordings/not_quite.mp3" type="audio/mpeg"></audio>');
+      document.getElementById("not_quite-recording").play();
+      setTimeout(function(){
+        socket.emit('type-word', 'step by step');
+        return;
+      }, 4000);
+      // dot();
       state = FLASH_MIC;
       return;
     }
@@ -315,7 +332,7 @@
         if (clip_counter < clip_len) {
           video_clips[clip_counter].click();
           task_counter = 0
-          state = PLAY_CLIP;
+          state = STRUGGLED;
         }
         return;
       }
