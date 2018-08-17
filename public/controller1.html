@@ -5,7 +5,7 @@
   <script>
   const INTRO = 0;
   const START = 1;
-  const STRUGGLED = 2;
+  const CHUNK_SPLIT = 2;
   const FLASH_MIC = 3;
   const FIRST_TASK = 4;
   const SECOND_TASK = 5;
@@ -250,85 +250,106 @@
       snd_tasks = $('.second-task-chunk').toArray();
       prints = $('.eng-end-chunk').toArray();
       clip_len = video_clips.length;
-      $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
-      document.getElementById("intro-recording").play();
-      socket.emit('type-word', 'Hi, I\'m Pingu');
-      setTimeout(function(){
-        socket.emit('type-delete');
-      }, 2800);
-      setTimeout(function(){
-        socket.emit('type-word', 'activity');
-      }, 8800);
-      setTimeout(function(){
-        socket.emit('type-delete');
-      }, 10000);
-      setTimeout(function(){
-        socket.emit('type-word', 'improve Spanish');
-      }, 10300);
-      setTimeout(function(){
-        socket.emit('type-delete');
-      }, 13500);
-      setTimeout(function(){
-        socket.emit('type-word', 'tough');
-      }, 14800);
-      setTimeout(function(){
-        socket.emit('type-delete');
-      }, 15700);
-      setTimeout(function(){
-        socket.emit('type-word', 'work together');
-      }, 15750);
-      setTimeout(function(){
-        socket.emit('type-delete');
-      }, 18000);
-      setTimeout(function(){
-        socket.emit('type-word', 'Ready?');
-      }, 19000);
+      // $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
+      // document.getElementById("intro-recording").play();
+      // socket.emit('type-word', 'Hi, I\'m Pingu');
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      // }, 2800);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'activity');
+      // }, 8800);
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      // }, 10000);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'improve Spanish');
+      // }, 10300);
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      // }, 13500);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'tough');
+      // }, 14800);
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      // }, 15700);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'work together');
+      // }, 15750);
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      // }, 18000);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'Ready?');
+      // }, 19000);
       state = START;
       return;
     }
     if (state == START) {
       socket.emit('type-delete');
-      $('#recordings').append('<audio id="start-recording"><source src="./recordings/start.mp3" type="audio/mpeg"></audio>');
-      document.getElementById("start-recording").play();
-      setTimeout(function(){
-        socket.emit('type-word', 'video clip');
-        return;
-      }, 2000);
-      setTimeout(function(){
-        socket.emit('type-delete');
-        return;
-      }, 3500);
-      setTimeout(function(){
-        socket.emit('type-word', 'repeat');
-        return;
-      }, 4200);
-      setTimeout(function(){
-        console.log('playing the video clip');
-        video_clips[clip_counter].click();
-        task_len = first_tasks.length;
-        setTimeout(function(){
-          $('#recordings').append('<audio id="what-said-recording"><source src="./recordings/what_said.mp3" type="audio/mpeg"></audio>');
-          document.getElementById("what-said-recording").play();
-          socket.emit('type-word', 'what was said?');
-          state = STRUGGLED;
-          return;
-        }, 4000);
-        return;
-      }, 7500);
+      // $('#recordings').append('<audio id="start-recording"><source src="./recordings/start.mp3" type="audio/mpeg"></audio>');
+      // document.getElementById("start-recording").play();
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'video clip');
+      //   return;
+      // }, 2000);
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      //   return;
+      // }, 3500);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'repeat');
+      //   return;
+      // }, 4200);
+      // setTimeout(function(){
+      //   console.log('playing the video clip');
+      //   video_clips[clip_counter].click();
+      //   task_len = first_tasks.length;
+      //   setTimeout(function(){
+      //     $('#recordings').append('<audio id="what-said-recording"><source src="./recordings/what_said.mp3" type="audio/mpeg"></audio>');
+      //     document.getElementById("what-said-recording").play();
+      //     socket.emit('type-word', 'what was said?');
+          state = CHUNK_SPLIT;
+      //     return;
+      //   }, 4000);
+      //   return;
+      // }, 7500);
+      return;
     }
-    if (state == STRUGGLED) {
+    if (state == CHUNK_SPLIT) {
       socket.emit('type-delete');
       $('#recordings').append('<audio id="not_quite-recording"><source src="./recordings/not_quite.mp3" type="audio/mpeg"></audio>');
       document.getElementById("not_quite-recording").play();
       setTimeout(function(){
+        socket.emit('type-word', 'work through it');
+        return;
+      }, 1000);
+      setTimeout(function(){
+        socket.emit('type-delete');
+        return;
+      }, 3000);
+      setTimeout(function(){
         socket.emit('type-word', 'step by step');
-        setTimeout(function(){
-          socket.emit('type-delete');
-          return;
-        }, 2000);
         return;
       }, 4800);
+      setTimeout(function(){
+        socket.emit('type-delete');
+        return;
+      }, 6800);
+      setTimeout(function(){
+        socket.emit('type-word', 'split into chunks');
+        return;
+      }, 7500);
+      setTimeout(function(){
+        socket.emit('type-delete');
+        return;
+      }, 10000);
       // dot();
+      setTimeout(function(){
+        first_tasks[task_counter].click();
+        return;
+      }, 11500);
       state = FLASH_MIC;
       return;
     }
@@ -368,7 +389,7 @@
         if (clip_counter < clip_len) {
           video_clips[clip_counter].click();
           task_counter = 0
-          state = STRUGGLED;
+          state = CHUNK_SPLIT;
         }
         return;
       }
