@@ -282,7 +282,7 @@
       }, 18000);
       setTimeout(function(){
         socket.emit('type-word', 'Ready?');
-      }, 19400);
+      }, 19000);
       state = START;
       return;
     }
@@ -290,6 +290,14 @@
       socket.emit('type-delete');
       $('#recordings').append('<audio id="start-recording"><source src="./recordings/start.mp3" type="audio/mpeg"></audio>');
       document.getElementById("start-recording").play();
+      setTimeout(function(){
+        socket.emit('type-word', 'video clip');
+        return;
+      }, 2000);
+      setTimeout(function(){
+        socket.emit('type-delete');
+        return;
+      }, 3500);
       setTimeout(function(){
         socket.emit('type-word', 'repeat');
         return;
