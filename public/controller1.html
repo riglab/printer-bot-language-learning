@@ -257,8 +257,32 @@
         socket.emit('type-delete');
       }, 2800);
       setTimeout(function(){
+        socket.emit('type-word', 'activity');
+      }, 8800);
+      setTimeout(function(){
+        socket.emit('type-delete');
+      }, 10000);
+      setTimeout(function(){
+        socket.emit('type-word', 'improve Spanish');
+      }, 10300);
+      setTimeout(function(){
+        socket.emit('type-delete');
+      }, 13500);
+      setTimeout(function(){
+        socket.emit('type-word', 'tough');
+      }, 14800);
+      setTimeout(function(){
+        socket.emit('type-delete');
+      }, 15700);
+      setTimeout(function(){
+        socket.emit('type-word', 'work together');
+      }, 15750);
+      setTimeout(function(){
+        socket.emit('type-delete');
+      }, 18000);
+      setTimeout(function(){
         socket.emit('type-word', 'Ready?');
-      }, 19500);
+      }, 19400);
       state = START;
       return;
     }
