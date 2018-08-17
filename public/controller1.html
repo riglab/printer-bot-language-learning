@@ -250,15 +250,15 @@
       snd_tasks = $('.second-task-chunk').toArray();
       prints = $('.eng-end-chunk').toArray();
       clip_len = video_clips.length;
-      // $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
-      // document.getElementById("intro-recording").play();
-      // socket.emit('type-word', 'Hi, I\'m Pingu');
-      // setTimeout(function(){
-      //   socket.emit('type-delete');
-      // }, 2800);
-      // setTimeout(function(){
-      //   socket.emit('type-word', 'Ready?');
-      // }, 19500);
+      $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
+      document.getElementById("intro-recording").play();
+      socket.emit('type-word', 'Hi, I\'m Pingu');
+      setTimeout(function(){
+        socket.emit('type-delete');
+      }, 2800);
+      setTimeout(function(){
+        socket.emit('type-word', 'Ready?');
+      }, 19500);
       state = START;
       return;
     }
@@ -290,8 +290,12 @@
       document.getElementById("not_quite-recording").play();
       setTimeout(function(){
         socket.emit('type-word', 'step by step');
+        setTimeout(function(){
+          socket.emit('type-delete');
+          return;
+        }, 2000);
         return;
-      }, 4000);
+      }, 4800);
       // dot();
       state = FLASH_MIC;
       return;
