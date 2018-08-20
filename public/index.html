@@ -103,7 +103,7 @@
     }
     // $('document.body').animate({backgroundColor: color}, 'slow');
     document.body.style.background = color
-    setTimeout(changeBack, 5000);
+    setTimeout(changeBack, 1000);
   });
 
   socket.on('play-video', function(video, start, duration){
@@ -174,7 +174,8 @@ vid.addEventListener('timeupdate', function() {
 });
 
 socket.on('type-word', function(word, subtitles){
-  document.getElementById("mic-animate").style.display = "none";
+  // console.log('about to type ' + word);
+  // document.getElementById("mic-animate").style.display = "none";
   $("#start").html('');
   if (!$("#text-area").length) {
     var textArea = '<div id="text-area"></div>';
@@ -182,20 +183,20 @@ socket.on('type-word', function(word, subtitles){
 
   $(".ti-dot").remove()
   $("#start").html(textArea);
-  console.log('subtitles is: ' + subtitles);
-  if (subtitles == "true") {
-    if (!$("#text-area").length) {
-      var textArea = '<div id="text-area"></div>';
-      $("#start").after(textArea);
-      $(".video").remove();
-    }
-    $('#text-area').typeIt({
-      speed:50,
-      autoStart: false,
-      lifeLike: false
-    })
-    .tiType(word);
-  } else {
+  // console.log('subtitles is: ' + subtitles);
+  // if (subtitles == "true") {
+  //   if (!$("#text-area").length) {
+  //     var textArea = '<div id="text-area"></div>';
+  //     $("#start").after(textArea);
+  //     $(".video").remove();
+  //   }
+  //   $('#text-area').typeIt({
+  //     speed:50,
+  //     autoStart: false,
+  //     lifeLike: false
+  //   })
+  //   .tiType(word);
+  // } else {
     if (!$("#text-area").length) {
       var textArea = '<div id="text-area"></div>';
       $("#start").after(textArea);
@@ -207,7 +208,7 @@ socket.on('type-word', function(word, subtitles){
       lifeLike: false
     })
     .tiType(word)
-  }
+  // }
   //say(word);
 })
 

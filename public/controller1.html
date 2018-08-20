@@ -6,15 +6,20 @@
   const INTRO = 0;
   const START = 1;
   const CHUNK_SPLIT = 2;
-  const FLASH_MIC = 3;
-  const FIRST_TASK = 4;
-  const SECOND_TASK = 5;
-  const CORRECT_FIRST = 6;
-  const WRONG_FIRST = 7;
-  const PRINT = 8;
-  const OFFER = 9;
-  const CORRECT_SND = 10;
-  const WRONG_SND = 11;
+  const FIRST_DISPLAY = 3;
+  const FIRST_INCORRECT = 4;
+  const FIRST_CORRECT = 5;
+  const SECOND_DISPLAY = 6;
+  const SECOND_INCORRECT = 7;
+  const SECOND_CORRECT = 8;
+  // const SECOND_TASK = 5;
+  // const CORRECT_FIRST = 6;
+  // const WRONG_FIRST = 7;
+  // const PRINT = 8;
+  // const OFFER = 9;
+  // const CORRECT_SND = 10;
+  // const WRONG_SND = 11;
+  let TUTORIAL = true;
   var state = INTRO;
   let captions = null;
   let videos = null;
@@ -38,16 +43,16 @@
   function dot() {
     socket.emit('type-word', '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
     setTimeout(function(){
-        socket.emit('mic');
+      socket.emit('mic');
     }, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.length+100);
   }
   function preinstn() {
     socket.emit('type-word', 'Listen to the videos I show you and repeat what you hear aloud when you see the red dot');
     setTimeout(function(){
-        socket.emit('type-word', 'Try saying "Hello Pingu"');
-        setTimeout(function(){
-          socket.emit('mic');
-        }, 'Try saying "Hello Pingu"'.length*100);
+      socket.emit('type-word', 'Try saying "Hello Pingu"');
+      setTimeout(function(){
+        socket.emit('mic');
+      }, 'Try saying "Hello Pingu"'.length*100);
     }, 'Listen to the videos I show you and repeat what you hear aloud when you see the red dot'.length*80);
 
 
@@ -150,17 +155,19 @@
         globalChunks.push(chunk);
         n++;
       }
+      // console.log(globalChunks);
       m++;
     }
 
     $(".end-chunk").click(function(){
-      state = FIRST_TASK;
+      // state = FIRST_TASK;
       var subtitles = "false";
 
       const chunkIndex = $(this).attr('chunk');
 
       output = globalChunks[chunkIndex]
 
+      // console.log(output);
       socket.emit('type-word', output, subtitles);
       // setTimeout(function(){
       //     socket.emit('mic');
@@ -181,7 +188,7 @@
       var duration = parseFloat($('#clip'+clipnum).attr('duration'));
       $('#clip'+clipnum).click();
       setTimeout(function(){
-        console.log(chunkIndex);
+        // console.log(chunkIndex);
         var text = '';
         $('#'+taskid).children('button').each(function () {
           // alert($(this).attr('chunk'));
@@ -190,7 +197,7 @@
           } else {
             text += $(this).text() + " ";
           }
-          console.log(text);
+          // console.log(text);
         });
         socket.emit('type-word', text);
       }, duration*1000*1.5);
@@ -214,7 +221,7 @@
     $(".word-button").click(function(){
       const word = $(this).attr('word');
       const def = $(this).attr('def');
-      console.log('def = ' + def);
+      // console.log('def = ' + def);
       if (def) {
         socket.emit('type-word-with-def', { word: word, def: def });
       } else {
@@ -233,9 +240,6 @@
   var first_tasks = [];
   var snd_tasks = [];
   var prints = [];
-
-
-
 
   var task_counter = 0
   var task_len = 0
@@ -310,7 +314,7 @@
       //     $('#recordings').append('<audio id="what-said-recording"><source src="./recordings/what_said.mp3" type="audio/mpeg"></audio>');
       //     document.getElementById("what-said-recording").play();
       //     socket.emit('type-word', 'what was said?');
-          state = CHUNK_SPLIT;
+      state = CHUNK_SPLIT;
       //     return;
       //   }, 4000);
       //   return;
@@ -319,57 +323,100 @@
     }
     if (state == CHUNK_SPLIT) {
       socket.emit('type-delete');
-      $('#recordings').append('<audio id="not_quite-recording"><source src="./recordings/not_quite.mp3" type="audio/mpeg"></audio>');
-      document.getElementById("not_quite-recording").play();
+      // $('#recordings').append('<audio id="not_quite-recording"><source src="./recordings/not_quite.mp3" type="audio/mpeg"></audio>');
+      // document.getElementById("not_quite-recording").play();
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'work through it');
+      //   return;
+      // }, 900);
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      //   return;
+      // }, 3000);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'step by step');
+      //   return;
+      // }, 4800);
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      //   return;
+      // }, 6800);
+      // setTimeout(function(){
+      //   socket.emit('type-word', 'split into chunks');
+      //   return;
+      // }, 6900);
+      // setTimeout(function(){
+      //   socket.emit('type-delete');
+      //   return;
+      // }, 10000);
+      // setTimeout(function(){
+      state = FIRST_DISPLAY;
+      //   forward();
+      // }, 11000);
+      // dot();
+      // setTimeout(function(){
+      //   first_tasks[task_counter].click();
+      //   return;
+      // }, 11500);
+      return;
+    }
+    if (state == FIRST_DISPLAY) {
+      // state changes have been bound to onlick functions
+      if (TUTORIAL == true) {
+        first_tasks[task_counter].click();
+        setTimeout(function(){
+          $('#recordings').append('<audio id="repeat-recording"><source src="./recordings/repeat.mp3" type="audio/mpeg"></audio>');
+          document.getElementById("repeat-recording").play();
+          state = FIRST_CORRECT;
+          return;
+        }, 1200);
+        return;
+      } else {
+        first_tasks[task_counter].click();
+        state = FIRST_CORRECT;
+        return;
+      }
+    }
+    if (state == FIRST_CORRECT) {
+      TUTORIAL = false;
+      socket.emit('type-delete');
+      changeColor('LightGreen');
+      $('#recordings').append('<audio id="got-it-recording"><source src="./recordings/got_it.mp3" type="audio/mpeg"></audio>');
+      document.getElementById("got-it-recording").play();
       setTimeout(function(){
-        socket.emit('type-word', 'work through it');
         return;
       }, 1000);
-      setTimeout(function(){
+      state = SECOND_DISPLAY;
+      forward();
+      return;
+    }
+    if (state == FIRST_INCORRECT) {
+      if (TUTORIAL == true) {
+        TUTORIAL = false;
+        $('#recordings').append('<audio id="try-again-recording"><source src="./recordings/try_again.mp3" type="audio/mpeg"></audio>');
+        document.getElementById("try-again-recording").play();
         socket.emit('type-delete');
+        changeColor('pink');
+        setTimeout(function(){
+          state = state - 1;
+          forward();
+        }, 3200);
         return;
-      }, 3000);
-      setTimeout(function(){
-        socket.emit('type-word', 'step by step');
-        return;
-      }, 4800);
-      setTimeout(function(){
+      } else {
         socket.emit('type-delete');
+        changeColor('pink');
+        setTimeout(function(){
+          state = state - 1;
+          forward();
+        }, 1500);
         return;
-      }, 6800);
-      setTimeout(function(){
-        socket.emit('type-word', 'split into chunks');
-        return;
-      }, 7500);
-      setTimeout(function(){
-        socket.emit('type-delete');
-        return;
-      }, 10000);
-      // dot();
-      setTimeout(function(){
-        first_tasks[task_counter].click();
-        return;
-      }, 11500);
-      state = FLASH_MIC;
-      return;
+      }
     }
-    if (state == FLASH_MIC) {
-      first_tasks[task_counter].click();
-      // state changes have been bound to onlick functions
-      // state = FIRST_TASK;
-      return;
-    }
-    if (state == FIRST_TASK) {
-      changeColor('LightGreen');
-      state = CORRECT_FIRST;
-      return;
-    }
-    if (state == CORRECT_FIRST) {
-      console.log(snd_tasks);
-      snd_tasks[task_counter].click();
-      // state = SECOND_TASK;
-      return;
-    }
+    // if (state == CORRECT_FIRST) {
+    //   snd_tasks[task_counter].click();
+    //   // state = SECOND_TASK;
+    //   return;
+    // }
     if (state == SECOND_TASK) {
       changeColor('LightGreen');
       state = CORRECT_SND;
@@ -384,8 +431,8 @@
       task_counter += 1;
       if (task_counter >= task_len) {
         clip_counter += 1;
-        console.log(clip_counter);
-        console.log(clip_len);
+        // console.log(clip_counter);
+        // console.log(clip_len);
         if (clip_counter < clip_len) {
           video_clips[clip_counter].click();
           task_counter = 0
@@ -410,21 +457,23 @@
 
   }
   function backward() {
-    if (state == FLASH_MIC) {
-      first_tasks[task_counter].click();
-      // state = FIRST_TASK;
-      return;
-    }
-    if (state == FIRST_TASK) {
-      changeColor('pink');
-      state = WRONG_FIRST;
-      return;
-    }
-    if (state == SECOND_TASK) {
-      changeColor('pink');
-      state = WRONG_SND;
-      return;
-    }
+    state = state - 1;
+    forward();
+    // if (state == FIRST_DISPLAY) {
+    //   first_tasks[task_counter].click();
+    //   // state = FIRST_TASK;
+    //   return;
+    // }
+    // if (state == FIRST_TASK) {
+    //   changeColor('pink');
+    //   state = WRONG_FIRST;
+    //   return;
+    // }
+    // if (state == SECOND_TASK) {
+    //   changeColor('pink');
+    //   state = WRONG_SND;
+    //   return;
+    // }
 
   }
 
