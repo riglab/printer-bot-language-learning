@@ -9,9 +9,10 @@
   const FIRST_DISPLAY = 3;
   const FIRST_INCORRECT = 4;
   const FIRST_CORRECT = 5;
-  const SECOND_DISPLAY = 6;
-  const SECOND_INCORRECT = 7;
-  const SECOND_CORRECT = 8;
+  const PRINT_TRANSLATION = 6;
+  const SECOND_DISPLAY = 7;
+  const SECOND_INCORRECT = 8;
+  const SECOND_CORRECT = 9;
   // const SECOND_TASK = 5;
   // const CORRECT_FIRST = 6;
   // const WRONG_FIRST = 7;
@@ -20,6 +21,7 @@
   // const CORRECT_SND = 10;
   // const WRONG_SND = 11;
   let TUTORIAL = true;
+  let SND_TUTORIAL = true;
   var state = INTRO;
   let captions = null;
   let videos = null;
@@ -180,27 +182,34 @@
       socket.emit('printer', chunk);
     });
     $(".second-task-chunk").click(function(){
-      state = SECOND_TASK;
+      // state = SECOND_TASK;
       const chunkIndex = $(this).attr('chunk');
 
       var taskid = $(this).parent().attr('id');
       var clipnum = taskid.slice(-1);
       var duration = parseFloat($('#clip'+clipnum).attr('duration'));
       $('#clip'+clipnum).click();
-      setTimeout(function(){
-        // console.log(chunkIndex);
-        var text = '';
-        $('#'+taskid).children('button').each(function () {
-          // alert($(this).attr('chunk'));
-          if ($(this).attr('chunk') == chunkIndex) {
-            text += ' ______ '
-          } else {
-            text += $(this).text() + " ";
-          }
-          // console.log(text);
-        });
-        socket.emit('type-word', text);
-      }, duration*1000*1.5);
+      if (SND_TUTORIAL) {
+        setTimeout(function(){
+          $('#recordings').append('<audio id="transcription-recording"><source src="./recordings/transcription.mp3" type="audio/mpeg"></audio>');
+          document.getElementById("transcription-recording").play();
+        }, duration*1000*1.5);
+
+        setTimeout(function(){
+          // console.log(chunkIndex);
+          var text = '';
+          $('#'+taskid).children('button').each(function () {
+            // alert($(this).attr('chunk'));
+            if ($(this).attr('chunk') == chunkIndex) {
+              text += ' ______ '
+            } else {
+              text += $(this).text() + " ";
+            }
+            // console.log(text);
+          });
+          socket.emit('type-word', text);
+        }, duration*1000*1.5);
+      }
       // setTimeout(function(){
       //     socket.emit('type-word', $(this).text());
       //     setTimeout(dot(), 3000)
@@ -380,15 +389,14 @@
     if (state == FIRST_CORRECT) {
       TUTORIAL = false;
       socket.emit('type-delete');
-      changeColor('LightGreen');
+      // changeColor('LightGreen');
       $('#recordings').append('<audio id="got-it-recording"><source src="./recordings/got_it.mp3" type="audio/mpeg"></audio>');
       document.getElementById("got-it-recording").play();
       setTimeout(function(){
+        state = PRINT_TRANSLATION;
+        forward();
         return;
-      }, 1000);
-      state = SECOND_DISPLAY;
-      forward();
-      return;
+      }, 1300);
     }
     if (state == FIRST_INCORRECT) {
       if (TUTORIAL == true) {
@@ -396,12 +404,15 @@
         $('#recordings').append('<audio id="try-again-recording"><source src="./recordings/try_again.mp3" type="audio/mpeg"></audio>');
         document.getElementById("try-again-recording").play();
         socket.emit('type-delete');
-        changeColor('pink');
+        // changeColor('pink');
+        setTimeout(function(){
+          socket.emit('type-word', 'try again');
+        }, 1800);
         setTimeout(function(){
           state = state - 1;
           forward();
-        }, 3200);
-        return;
+          return;
+        }, 3800);
       } else {
         socket.emit('type-delete');
         changeColor('pink');
@@ -412,48 +423,84 @@
         return;
       }
     }
+    if (state == PRINT_TRANSLATION) {
+      $('#recordings').append('<audio id="translation-recording"><source src="./recordings/translation.mp3" type="audio/mpeg"></audio>');
+      document.getElementById("translation-recording").play();
+      setTimeout(function(){
+        socket.emit('type-word', 'English Translation');
+      }, 300);
+      setTimeout(function(){
+        socket.emit('type-delete');
+        state = SECOND_DISPLAY;
+        forward();
+        return;
+      }, 3000);
+    }
+    if (state == SECOND_DISPLAY) {
+      if (SND_TUTORIAL == true) {
+        $('#recordings').append('<audio id="context-recording"><source src="./recordings/context.mp3" type="audio/mpeg"></audio>');
+        document.getElementById("context-recording").play();
+        setTimeout(function(){
+          socket.emit('type-word', 'again, in context');
+        }, 1800);
+        setTimeout(function(){
+          snd_tasks[task_counter].click();
+          state = SECOND_CORRECT;
+          forward();
+        }, 7000);
+        return;
+      }
+    }
+    if (SECOND_CORRECT) {
+      
+    }
+    if (SECOND_INCORRECT) {
+
+    }
+
     // if (state == CORRECT_FIRST) {
     //   snd_tasks[task_counter].click();
     //   // state = SECOND_TASK;
     //   return;
     // }
-    if (state == SECOND_TASK) {
-      changeColor('LightGreen');
-      state = CORRECT_SND;
-      return;
-    }
-    if (state == CORRECT_SND) {
-      // prints[task_counter].click();
-      state = PRINT;
-      return;
-    }
-    if (state == PRINT) {
-      task_counter += 1;
-      if (task_counter >= task_len) {
-        clip_counter += 1;
-        // console.log(clip_counter);
-        // console.log(clip_len);
-        if (clip_counter < clip_len) {
-          video_clips[clip_counter].click();
-          task_counter = 0
-          state = CHUNK_SPLIT;
-        }
-        return;
-      }
-      first_tasks[task_counter].click();
-      // state = FIRST_TASK;
-      return;
-    }
-    if (state == WRONG_FIRST) {
-      first_tasks[task_counter].click();
-      // state = FIRST_TASK;
-      return;
-    }
-    if (state == WRONG_SND) {
-      snd_tasks[task_counter].click();
-      // state = SECOND_TASK;
-      return;
-    }
+    // if (state == SECOND_TASK) {
+    //   changeColor('LightGreen');
+    //   state = CORRECT_SND;
+    //   return;
+    // }
+    // if (state == CORRECT_SND) {
+    //   // prints[task_counter].click();
+    //   state = PRINT;
+    //   return;
+    // }
+    // if (state == PRINT) {
+    //   task_counter += 1;
+    //   if (task_counter >= task_len) {
+    //     clip_counter += 1;
+    //     // console.log(clip_counter);
+    //     // console.log(clip_len);
+    //     if (clip_counter < clip_len) {
+    //       console.log(video_clips[clip_counter]);
+    //       video_clips[clip_counter].click();
+    //       task_counter = 0
+    //       state = CHUNK_SPLIT;
+    //     }
+    //     return;
+    //   }
+    //   first_tasks[task_counter].click();
+    //   // state = FIRST_TASK;
+    //   return;
+    // }
+    // if (state == WRONG_FIRST) {
+    //   first_tasks[task_counter].click();
+    //   // state = FIRST_TASK;
+    //   return;
+    // }
+    // if (state == WRONG_SND) {
+    //   snd_tasks[task_counter].click();
+    //   // state = SECOND_TASK;
+    //   return;
+    // }
 
   }
   function backward() {
