@@ -189,7 +189,7 @@
       var clipnum = taskid.slice(-1);
       var duration = parseFloat($('#clip'+clipnum).attr('duration'));
       $('#clip'+clipnum).click();
-      if (SND_TUTORIAL) {
+      if (SND_TUTORIAL == true) {
         setTimeout(function(){
           $('#recordings').append('<audio id="transcription-recording"><source src="./recordings/transcription.mp3" type="audio/mpeg"></audio>');
           document.getElementById("transcription-recording").play();
@@ -209,11 +209,19 @@
           });
           socket.emit('type-word', text);
         }, duration*1000*1.5);
+      } else {
+        setTimeout(function(){
+          var text = '';
+          $('#'+taskid).children('button').each(function () {
+            if ($(this).attr('chunk') == chunkIndex) {
+              text += ' ______ '
+            } else {
+              text += $(this).text() + " ";
+            }
+          });
+          socket.emit('type-word', text);
+        }, duration*1000*1.5);
       }
-      // setTimeout(function(){
-      //     socket.emit('type-word', $(this).text());
-      //     setTimeout(dot(), 3000)
-      // }, 3000);
     });
 
     $(".play-video").click(function(){
@@ -446,16 +454,38 @@
         setTimeout(function(){
           snd_tasks[task_counter].click();
           state = SECOND_CORRECT;
-          forward();
         }, 7000);
+        return;
+      } else {
+        snd_tasks[task_counter].click();
+        state = SECOND_CORRECT;
         return;
       }
     }
-    if (SECOND_CORRECT) {
-      
+    if (state == SECOND_CORRECT) {
+      if (SND_TUTORIAL == true) {
+        $('#recordings').append('<audio id="keep-going-recording"><source src="./recordings/keep_going.mp3" type="audio/mpeg"></audio>');
+        document.getElementById("keep-going-recording").play();
+        SND_TUTORIAL = false;
+        setTimeout(function(){
+          socket.emit('type-word', 'Making progress');
+        }, 800);
+      } else {
+        console.log('you\'re right!');
+        socket.emit('type-delete');
+      }
     }
-    if (SECOND_INCORRECT) {
-
+    if (state == SECOND_INCORRECT) {
+      $('#recordings').append('<audio id="try-again-simple-recording"><source src="./recordings/try_again_simple.mp3" type="audio/mpeg"></audio>');
+      document.getElementById("try-again-simple-recording").play();
+      socket.emit('type-word', 'Try again');
+      SND_TUTORIAL = false;
+      setTimeout(function(){
+        socket.emit('type-delete');
+        state = state - 1;
+        forward();
+      }, 1500);
+      return;
     }
 
     // if (state == CORRECT_FIRST) {
