@@ -271,8 +271,10 @@
       snd_tasks = $('.second-task-chunk').toArray();
       prints = $('.eng-end-chunk').toArray();
       clip_len = video_clips.length;
+      
       $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
       document.getElementById("intro-recording").play();
+
       socket.emit('type-word', 'Hi, I\'m Pingu');
       setTimeout(function(){
         socket.emit('type-delete');
