@@ -57,20 +57,6 @@
       }, 'Try saying "Hello Pingu"'.length*100);
     }, 'Listen to the videos I show you and repeat what you hear aloud when you see the red dot'.length*80);
 
-
-    // socket.emit('type-word', '1. Every time you get a phrase right, the robot offers you a English translation. After completing a full video, feel free to tear it off.');
-    // setTimeout(function(){
-    //   socket.emit('printer', "Hi, how are you!");
-    //   socket.emit('offerandreturn');
-    // }, 500);
-
-    // setTimeout(function(){
-    //     socket.emit('type-delete');
-    //     socket.emit('type-word', '2. Start repeating the video after you see the red dot')
-    //     setTimeout(function(){
-    //         socket.emit('mic');
-    //     }, '1. Start repeating the video after you see the red dot'.length*80);
-    // }, 12000);
   }
   function preinstn2() {
     socket.emit('type-word', 'When you say a phrase correctly, I\'ll give you a printout.');
@@ -271,41 +257,46 @@
       snd_tasks = $('.second-task-chunk').toArray();
       prints = $('.eng-end-chunk').toArray();
       clip_len = video_clips.length;
-      
-      $('#recordings').append('<audio id="intro-recording"><source src="./recordings/intro.mp3" type="audio/mpeg"></audio>');
+
+      console.log('starting sequence...');
+
+      /********************/
+      /*** Introduction ***/
+      /********************/
+      $('#recordings').append('<audio id="intro-recording"><source src="./audio/intro.mp3" type="audio/mpeg"></audio>');
       document.getElementById("intro-recording").play();
 
       socket.emit('type-word', 'Hi, I\'m Pingu');
       setTimeout(function(){
         socket.emit('type-delete');
-      }, 2800);
+      }, 2650);
       setTimeout(function(){
-        socket.emit('type-word', 'activity');
-      }, 8800);
+        socket.emit('type-word', 'social robot');
+      }, 2650);
       setTimeout(function(){
         socket.emit('type-delete');
-      }, 10000);
+      }, 4500);
       setTimeout(function(){
         socket.emit('type-word', 'improve Spanish');
-      }, 10300);
+      }, 4700);
+      setTimeout(function(){
+        socket.emit('type-delete');
+      }, 8000);
+      setTimeout(function(){
+        socket.emit('type-word', 'want to learn');
+      }, 8350);
+      setTimeout(function(){
+        socket.emit('type-delete');
+      }, 10500);
+      setTimeout(function(){
+        socket.emit('type-word', 'activity');
+      }, 11500);
       setTimeout(function(){
         socket.emit('type-delete');
       }, 13500);
       setTimeout(function(){
-        socket.emit('type-word', 'tough');
-      }, 14800);
-      setTimeout(function(){
-        socket.emit('type-delete');
-      }, 15700);
-      setTimeout(function(){
-        socket.emit('type-word', 'work together');
-      }, 15750);
-      setTimeout(function(){
-        socket.emit('type-delete');
-      }, 18000);
-      setTimeout(function(){
         socket.emit('type-word', 'Ready?');
-      }, 19000);
+      }, 14500);
       state = START;
       return;
     }
