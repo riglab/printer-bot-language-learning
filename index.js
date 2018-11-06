@@ -125,7 +125,7 @@ io.on('connection', function(socket){
   });
 });
 
-// speechFunctions.synthesize();
+speechFunctions.synthesize();
 
 server.listen(3000, function () {
   console.log('Launching language robot!')

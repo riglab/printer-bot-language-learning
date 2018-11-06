@@ -36,7 +36,7 @@ exports.synthesize = function() {
   /**********************/
   /**** Introduction ****/
   /**********************/
-  var text = 'Hi, I\’m Pingu. Nice to meet you. I\’m a social robot designed to help people improve their Spanish listening comprehension skills. I\’ve heard you want to learn Spanish. Luckily,I know a language learning activity that may help you. Let me know when you’re ready!';
+  var text = 'Hi, I\’m Pingu. Nice to meet you. I\’m a social robot designed to help people improve their Spanish listening comprehension skills. I\’ve heard you want to learn Spanish. Luckily,I know a language learning activity that may help. Let me know when you’re ready!';
   speech(getRequest(text), 'intro.mp3');
 
   /********************/
@@ -44,4 +44,10 @@ exports.synthesize = function() {
   /********************/
   text = 'Great, let’s go! I’ll start by playing a video clip in Spanish and you’ll try to repeat what was said. Here’s the video:';
   speech(getRequest(text), 'start.mp3');
+
+  /************************/
+  /**** What was said? ****/
+  /************************/
+  text = 'What was said?';
+  speech(getRequest(text), 'what_said.mp3');
 }
