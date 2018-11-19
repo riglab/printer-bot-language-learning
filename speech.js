@@ -50,4 +50,58 @@ exports.synthesize = function() {
   /************************/
   text = 'What was said?';
   speech(getRequest(text), 'what_said.mp3');
+
+  /***********************/
+  /**** First Attempt ****/
+  /***********************/
+  text = 'Not quite, but we can work through it together. Let\’s try it again, but this time we\’ll go through the task step by step. I\’ve split the video\’s dialogue into chunks. Here\’s the first one:';
+  speech(getRequest(text), 'not_quite.mp3');
+
+  /****************/
+  /**** Repeat ****/
+  /****************/
+  text = 'Repeat this.';
+  speech(getRequest(text), 'repeat.mp3');
+
+  /***********************/
+  /**** First Correct ****/
+  /***********************/
+  text = 'You got it!';
+  speech(getRequest(text), 'got_it.mp3');
+
+  /***********************/
+  /**** First Incorrect ****/
+  /***********************/
+  text = 'Not quite. Let\’s go back and try it again:';
+  speech(getRequest(text), 'try_again.mp3');
+
+  /*****************************/
+  /**** English Translation ****/
+  /*****************************/
+  text = 'Here’s an English translation that may help.';
+  speech(getRequest(text), 'translation.mp3');
+
+  /*****************/
+  /**** Context ****/
+  /*****************/
+  text = 'Let\’s see if you can repeat the chunk again, in context. First, I\’ll replay the video:';
+  speech(getRequest(text), 'context.mp3');
+
+  /***********************/
+  /**** Transcription ****/
+  /***********************/
+  text = 'Here\’s a transcription you can use as a guide. Of course, I hid the chunk you just learned. Try repeating what was said:';
+  speech(getRequest(text), 'transcription.mp3');
+
+  /********************/
+  /**** Keep Going ****/
+  /********************/
+  text = 'Nice job. We’re making great progress. Let’s keep going!';
+  speech(getRequest(text), 'keep_going.mp3');
+
+  /********************/
+  /**** Try Again ****/
+  /********************/
+  text = 'Let’s try it again.';
+  speech(getRequest(text), 'try_again_simple.mp3');
 }
