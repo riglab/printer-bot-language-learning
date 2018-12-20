@@ -27,3 +27,13 @@ body {
   height: 58px;
   background-image: url("../check-icon.svg");
 }
+
+#repeat-tag {
+    font-size: 55px;
+    color: rgba(255,255,255,.6);
+    font-family: 'Roboto';
+    font-weight: 600;
+    position: fixed;
+    left: 40px;
+    top: 180px;
+}

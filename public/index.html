@@ -239,12 +239,14 @@ socket.on('voice-recog', function(word){
 <body>
   <div id="start">
   </div>
+  <div id="repeat-tag">repeat</div>
   <!-- <div id="feedback-area"></div> -->
   <div id="text-area"></div>
   <img id="mic-animate" src="mic-animate.gif" alt="Start" align="middle" style="display: none;width:128px;height:128px;">
 </body>
 
 <script>
+$("#repeat-tag").css("display", "none");
 $('#text-area').typeIt({
   strings: '',
   speed: 70,
