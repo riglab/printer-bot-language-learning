@@ -263,7 +263,7 @@
       /********************/
       /*** Introduction ***/
       /********************/
-      /*$('#recordings').append('<audio id="intro-recording"><source src="./audio/intro.mp3" type="audio/mpeg"></audio>');
+      $('#recordings').append('<audio id="intro-recording"><source src="./audio/intro.mp3" type="audio/mpeg"></audio>');
       document.getElementById("intro-recording").play();
 
       socket.emit('type-word', 'Hi, I\'m Pingu');
@@ -295,9 +295,8 @@
         socket.emit('type-delete');
       }, 13000);
       setTimeout(function(){
-        socket.emit('type-word', 'Ready?');
+        socket.emit('type-word', 'ready?');
       }, 14000);
-      */
       state = START;
       return;
     }
@@ -306,7 +305,7 @@
     /*** Start Task ***/
     /******************/
     if (state == START) {
-      /*socket.emit('type-delete');
+      socket.emit('type-delete');
       $('#recordings').append('<audio id="start-recording"><source src="./audio/start.mp3" type="audio/mpeg"></audio>');
       document.getElementById("start-recording").play();
       socket.emit('type-word', 'let\'s go');
@@ -333,17 +332,16 @@
         /**********************/
         /*** What was said? ***/
         /**********************/
-        /*setTimeout(function(){
+        setTimeout(function(){
           $('#recordings').append('<audio id="what-said-recording"><source src="./audio/what_said.mp3" type="audio/mpeg"></audio>');
           document.getElementById("what-said-recording").play();
           socket.emit('type-word', 'what was said?');
-          */
       state = CHUNK_SPLIT;
           return;
-        /*}, 4000);
+        }, 4000);
         return;
       }, 7500);
-      return;*/
+      return;
     }
 
     /*********************/
@@ -396,6 +394,10 @@
       return;
     }
 
+    /**************************/
+    /*** Start of Core Task ***/
+    /**************************/
+
     /**************/
     /*** Repeat ***/
     /**************/
@@ -421,16 +423,23 @@
     /*** First Correct ***/
     /*********************/
     if (state == FIRST_CORRECT) {
-      TUTORIAL = false;
-      socket.emit('type-delete');
-      // changeColor('LightGreen');
-      $('#recordings').append('<audio id="got-it-recording"><source src="./audio/got_it.mp3" type="audio/mpeg"></audio>');
-      document.getElementById("got-it-recording").play();
-      setTimeout(function(){
+      if (TUTORIAL == true) {
+        // TUTORIAL = false;
+        socket.emit('type-delete');
+        // changeColor('LightGreen');
+        $('#recordings').append('<audio id="got-it-recording"><source src="./audio/got_it.mp3" type="audio/mpeg"></audio>');
+        document.getElementById("got-it-recording").play();
+        setTimeout(function(){
+          state = PRINT_TRANSLATION;
+          forward();
+          return;
+        }, 1300);
+      } else {
+        // changeColor('LightGreen');
+        // setTimeout(1000);
         state = PRINT_TRANSLATION;
         forward();
-        return;
-      }, 1300);
+      }
     }
 
     /***********************/
@@ -438,7 +447,7 @@
     /***********************/
     if (state == FIRST_INCORRECT) {
       if (TUTORIAL == true) {
-        TUTORIAL = false;
+        // TUTORIAL = false;
         $('#recordings').append('<audio id="try-again-recording"><source src="./audio/try_again.mp3" type="audio/mpeg"></audio>');
         document.getElementById("try-again-recording").play();
         socket.emit('type-delete');
@@ -466,17 +475,23 @@
     /*** English Translation ***/
     /***************************/
     if (state == PRINT_TRANSLATION) {
-      $('#recordings').append('<audio id="translation-recording"><source src="./audio/translation.mp3" type="audio/mpeg"></audio>');
-      document.getElementById("translation-recording").play();
-      setTimeout(function(){
-        socket.emit('type-word', 'English Translation');
-      }, 300);
-      setTimeout(function(){
-        socket.emit('type-delete');
+      if (TUTORIAL == true) {
+        $('#recordings').append('<audio id="translation-recording"><source src="./audio/translation.mp3" type="audio/mpeg"></audio>');
+        document.getElementById("translation-recording").play();
+        setTimeout(function(){
+          socket.emit('type-word', 'English translation');
+        }, 300);
+        setTimeout(function(){
+          socket.emit('type-delete');
+          state = SECOND_DISPLAY;
+          forward();
+          return;
+        }, 3000);
+      } else {
+        // print out the English translation
         state = SECOND_DISPLAY;
         forward();
-        return;
-      }, 3000);
+      }
     }
 
     /***************/
@@ -511,7 +526,10 @@
         document.getElementById("keep-going-recording").play();
         SND_TUTORIAL = false;
         setTimeout(function(){
-          socket.emit('type-word', 'Making progress');
+          socket.emit('type-word', 'making progress');
+          task_counter = task_counter + 1;
+          TUTORIAL = false;
+          state = FIRST_DISPLAY;
         }, 800);
       } else {
         console.log('you\'re right!');

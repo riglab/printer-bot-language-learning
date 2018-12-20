@@ -21,3 +21,9 @@ body {
   width: 100%;
   text-align: center;
 }
+
+#feedback-area {
+  width: 58px;
+  height: 58px;
+  background-image: url("../check-icon.svg");
+}
