@@ -70,6 +70,9 @@ io.on('connection', function(socket){
   socket.on('type-word', function(text, subtitles){
     io.sockets.emit('type-word', text, subtitles);
   });
+	socket.on('repeat-tag', function(display){
+    io.sockets.emit('repeat-tag', display);
+  });
   socket.on('voice-recog', function(word){
     io.sockets.emit('voice-recog',word);
   });

@@ -36,4 +36,5 @@ body {
     position: fixed;
     left: 40px;
     top: 180px;
+    display: none;
 }

@@ -260,6 +260,8 @@
 
       console.log('starting sequence...');
 
+      $('#recordings').append('<audio id="pingu-bell-sound"><source src="./audio/pingu-bell-sound.mp3" type="audio/mpeg"></audio>');
+
       /********************/
       /*** Introduction ***/
       /********************/
@@ -404,8 +406,6 @@
     if (state == FIRST_DISPLAY) {
       // state changes have been bound to onlick functions
       if (TUTORIAL == true) {
-        console.log('here in tutorial');
-        // $("#repeat-tag").css('display', 'block');
         first_tasks[task_counter].click();
         setTimeout(function(){
           $('#recordings').append('<audio id="repeat-recording"><source src="./audio/repeat.mp3" type="audio/mpeg"></audio>');
@@ -415,8 +415,7 @@
         }, 1200);
         return;
       } else {
-        console.log('here');
-        // $("#repeat-tag").css("display", "block");
+        socket.emit('repeat-tag', 'block');
         first_tasks[task_counter].click();
         state = FIRST_CORRECT;
         return;
@@ -432,6 +431,7 @@
         socket.emit('type-delete');
         // changeColor('LightGreen');
         $('#recordings').append('<audio id="got-it-recording"><source src="./audio/got_it.mp3" type="audio/mpeg"></audio>');
+        document.getElementById("pingu-bell-sound").play();
         document.getElementById("got-it-recording").play();
         setTimeout(function(){
           state = PRINT_TRANSLATION;
@@ -439,7 +439,7 @@
           return;
         }, 1300);
       } else {
-        $("#repeat-tag").css("display", "none");
+        socket.emit('repeat-tag', 'none');
         // changeColor('LightGreen');
         // setTimeout(1000);
         state = PRINT_TRANSLATION;
@@ -528,6 +528,7 @@
     if (state == SECOND_CORRECT) {
       if (SND_TUTORIAL == true) {
         $('#recordings').append('<audio id="keep-going-recording"><source src="./audio/keep_going.mp3" type="audio/mpeg"></audio>');
+        document.getElementById("pingu-bell-sound").play();
         document.getElementById("keep-going-recording").play();
         SND_TUTORIAL = false;
         setTimeout(function(){
